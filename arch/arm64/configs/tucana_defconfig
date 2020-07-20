@@ -1527,7 +1527,7 @@ CONFIG_UID_SYS_STATS=y
 #
 # FingerprintCard fingerprint driver
 #
-CONFIG_FPR_FPC=y
+# CONFIG_FPR_FPC is not set
 
 #
 # SCSI device support

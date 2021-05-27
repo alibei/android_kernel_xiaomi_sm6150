@@ -22,6 +22,9 @@
 struct cam_req_mgr_trigger_notify;
 struct cam_req_mgr_error_notify;
 struct cam_req_mgr_add_request;
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+struct cam_req_mgr_notify_stop;
+#endif
 struct cam_req_mgr_device_info;
 struct cam_req_mgr_core_dev_link_setup;
 struct cam_req_mgr_apply_request;
@@ -43,6 +46,9 @@ typedef int (*cam_req_mgr_notify_trigger)(
 	struct cam_req_mgr_trigger_notify *);
 typedef int (*cam_req_mgr_notify_err)(struct cam_req_mgr_error_notify *);
 typedef int (*cam_req_mgr_add_req)(struct cam_req_mgr_add_request *);
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+typedef int (*cam_req_mgr_notify_stop)(struct cam_req_mgr_notify_stop *);
+#endif
 
 /**
  * @brief: cam req mgr to camera device drivers
@@ -67,11 +73,15 @@ typedef int (*cam_req_mgr_process_evt)(struct cam_req_mgr_link_evt_data *);
  * @notify_trigger : payload for trigger indication event
  * @notify_err     : payload for different error occurred at device
  * @add_req        : payload to inform which device and what request is received
+ * @notify_stop    : payload to inform stop event
  */
 struct cam_req_mgr_crm_cb {
 	cam_req_mgr_notify_trigger  notify_trigger;
 	cam_req_mgr_notify_err      notify_err;
 	cam_req_mgr_add_req         add_req;
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+	cam_req_mgr_notify_stop     notify_stop;
+#endif
 };
 
 /**
@@ -147,6 +157,9 @@ enum cam_req_mgr_device_error {
 	CRM_KMD_ERR_PAGE_FAULT,
 	CRM_KMD_ERR_OVERFLOW,
 	CRM_KMD_ERR_TIMEOUT,
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+	CRM_KMD_ERR_STOPPED,
+#endif
 	CRM_KMD_ERR_MAX,
 };
 
@@ -240,6 +253,16 @@ struct cam_req_mgr_add_request {
 	uint32_t skip_before_applying;
 };
 
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+/**
+ * struct cam_req_mgr_notify_stop
+ * @link_hdl             : link identifier
+ *
+ */
+struct cam_req_mgr_notify_stop {
+	int32_t  link_hdl;
+};
+#endif
 
 /* CRM to KMD devices */
 /**

@@ -3472,6 +3472,19 @@ static int __cam_isp_ctx_stop_dev_in_activated_unlock(
 			&stop);
 	}
 
+#ifdef CONFIG_SPECTRA_CAMERA_UPGRADE
+	if (ctx->ctx_crm_intf &&
+		ctx->ctx_crm_intf->notify_stop) {
+		struct cam_req_mgr_notify_stop notify;
+		notify.link_hdl = ctx->link_hdl;
+		CAM_DBG(CAM_ISP,
+			"Notify CRM about device stop ctx %u link 0x%x",
+			ctx->ctx_id, ctx->link_hdl);
+		ctx->ctx_crm_intf->notify_stop(&notify);
+	} else
+		CAM_ERR(CAM_ISP, "cb not present");
+#endif
+
 	while (!list_empty(&ctx->pending_req_list)) {
 		req = list_first_entry(&ctx->pending_req_list,
 				struct cam_ctx_request, list);

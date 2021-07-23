@@ -1297,6 +1297,8 @@ static int cam_fd_mgr_hw_start(void *hw_mgr_priv, void *mgr_start_args)
 	fd_hw = (struct cam_hw_info *)hw_device->hw_intf->hw_priv;
 	fd_core = (struct cam_fd_core *)fd_hw->core_info;
 
+	hw_device->ready_to_process = true;
+
 	if (hw_device->hw_intf->hw_ops.init) {
 		hw_init_args.hw_ctx = hw_ctx;
 		hw_init_args.ctx_hw_private = hw_ctx->ctx_hw_private;
@@ -1573,6 +1575,8 @@ static int cam_fd_mgr_hw_stop(void *hw_mgr_priv, void *mgr_stop_args)
 
 	CAM_DBG(CAM_FD, "FD Device ready_to_process = %d",
 		hw_device->ready_to_process);
+
+	hw_device->ready_to_process = true;
 
 	if (hw_device->hw_intf->hw_ops.deinit) {
 		hw_deinit_args.hw_ctx = hw_ctx;

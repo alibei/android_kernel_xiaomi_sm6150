@@ -8269,6 +8269,7 @@ static int find_energy_efficient_cpu(struct sched_domain *sd,
 		prefer_idle = sched_feat(EAS_PREFER_IDLE) ?
 				(schedtune_prefer_idle(p) > 0) : 0;
 
+#ifdef CONFIG_SCHED_WALT
 		/*
 		 * when input boost is active, enable need_idle for
 		 * all tasks. we use need_idle instead of prefer_idle
@@ -8277,6 +8278,7 @@ static int find_energy_efficient_cpu(struct sched_domain *sd,
 		 */
 		if (sched_prefer_idle_on_input)
 			need_idle = true;
+#endif
 
 		eenv->max_cpu_count = EAS_CPU_BKP + 1;
 

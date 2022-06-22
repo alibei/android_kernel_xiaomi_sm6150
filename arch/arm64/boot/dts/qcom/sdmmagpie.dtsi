@@ -483,6 +483,13 @@
 					fsmgr_flags = "wait,avb";
 					status = "ok";
 				};
+				system_ext {
+					compatible = "android,system_ext";
+					dev = "/dev/block/platform/soc/1d84000.ufshc/by-name/cust";
+					type = "ext4";
+					mnt_flags = "ro,noatime,nodev,barrier=1";
+					fsmgr_flags = "wait";
+				};
 			};
 		};
 	};

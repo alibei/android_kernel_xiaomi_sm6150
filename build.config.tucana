@@ -1,0 +1,8 @@
+# Define kernel path
+KERNEL_DIR=kernel/xiaomi/sm6150
+
+# Define defconfig
+DEVICE_DEFCONFIG=${DEVICE_DEFCONFIG:-${KERNEL_DIR}/arch/arm64/configs/vendor/tucana.config}
+
+# Inherit from sdmsteppe
+. ${KERNEL_DIR}/build.config.sdmsteppe

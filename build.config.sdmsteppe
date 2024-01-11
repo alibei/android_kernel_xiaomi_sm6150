@@ -1,0 +1,40 @@
+# Inherit from ACK
+. ${KERNEL_DIR}/build.config.common
+. ${KERNEL_DIR}/build.config.aarch64
+
+# Define build tools path
+BUILDTOOLS_PREBUILT_BIN=prebuilts/kernel-build-tools/linux-x86/bin
+
+# Clang
+CLANG_PREBUILT_BIN=prebuilts-master/clang/host/linux-x86/clang-r416183c/bin
+LLVM=1
+LLVM_IAS=1
+
+# GCC
+LINUX_GCC_CROSS_COMPILE_PREBUILTS_BIN=prebuilts/gcc/linux-x86/aarch64/aarch64-elf/bin
+CROSS_COMPILE=aarch64-elf-
+
+# DTC
+DTC=${ROOT_DIR}/${BUILDTOOLS_PREBUILT_BIN}/dtc
+
+# Define defconfigs
+DEFCONFIG=${DEFCONFIG:-generated_defconfig}
+SOC_DEFCONFIG=${SOC_DEFCONFIG:-${KERNEL_DIR}/arch/arm64/configs/vendor/sdmsteppe-perf_defconfig}
+DEBUG_DEFCONFIG=${DEBUG_DEFCONFIG:-${KERNEL_DIR}/arch/arm64/configs/vendor/debugfs.config}
+
+# Generate defconfig
+PRE_DEFCONFIG_CMDS="KCONFIG_CONFIG=${KERNEL_DIR}/arch/arm64/configs/${DEFCONFIG} \
+    ${KERNEL_DIR}/scripts/kconfig/merge_config.sh -m -r \
+    ${SOC_DEFCONFIG} \
+    ${DEVICE_DEFCONFIG} \
+    ${DEBUG_DEFCONFIG}"
+
+# Remove generated defconfig after build
+POST_DEFCONFIG_CMDS="rm ${KERNEL_DIR}/arch/arm64/configs/${DEFCONFIG}"
+
+# Artifacts to be copied over for the prebuilt repo
+FILES+="
+arch/arm64/boot/Image.gz
+arch/arm64/boot/dts/qcom/xiaomi-sdmmagpie.dtb
+arch/arm64/boot/dtbo.img
+"
